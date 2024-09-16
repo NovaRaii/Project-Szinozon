@@ -1,0 +1,7 @@
+D:\Nagy Gergely 12.p\szinozon\bin\Debug\szinozon.exe.config
+D:\Nagy Gergely 12.p\szinozon\bin\Debug\szinozon.exe
+D:\Nagy Gergely 12.p\szinozon\bin\Debug\szinozon.pdb
+D:\Nagy Gergely 12.p\szinozon\obj\Debug\szinozon.csproj.AssemblyReference.cache
+D:\Nagy Gergely 12.p\szinozon\obj\Debug\szinozon.csproj.CoreCompileInputs.cache
+D:\Nagy Gergely 12.p\szinozon\obj\Debug\szinozon.exe
+D:\Nagy Gergely 12.p\szinozon\obj\Debug\szinozon.pdb
