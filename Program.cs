@@ -96,6 +96,7 @@ namespace szinozon
         {
 
             string[] eredmeny = new string[4];
+            Console.WriteLine();
             Console.WriteLine("Parancsok: \nKilépés - a játék során bármikor ki lehet lépni a főmenübe\nSzabad a gazda - a játék véget ér és a gép felfedi a megoldást\nParancsok végrehajtása - Írd be a tippelésnél a parancsot!");
             Console.WriteLine();
             int probak = 1;
@@ -110,14 +111,11 @@ namespace szinozon
                 for (int i = 1; i < 5; i++)
                 {
                     Console.WriteLine($"{i}. szín:");
-                    string tipp = Console.ReadLine();
+                    string tipp = Console.ReadLine().Trim();
+                    tipp = tipp.Split(' ')[0];
                     if (tipp == "Kilépés")
                     {
                         Belepes(megoldas, tippek, szinek);
-                    }
-                    if (tipp == "vissza") 
-                    {
-                        
                     }
                     if (tipp == "szabad a gazda")
                     {
@@ -152,10 +150,11 @@ namespace szinozon
                         }
                         Console.ForegroundColor = ConsoleColor.White;
                         return;
+
                     }
                     else
                     {
-                        tippek.Add(tipp);
+                        tippek.Add(tipp.ToLower());
                     }
 
                 }
@@ -238,17 +237,8 @@ namespace szinozon
                 Console.WriteLine("Sajnálom, nem találtad el a megoldást.");
             }
             Console.WriteLine();
-            Console.WriteLine("Új játék?: Igen/Nem");
-            string valasz = Console.ReadLine();
-            if (valasz == "Igen")
-            {
-                Generalas(megoldas, szinek);
-                Tippeles(tippek, megoldas, szinek);
-            }
-            if (valasz == "Nem")
-            {
-                Belepes(megoldas, tippek, szinek);
-            }
+            return;
+            
         }
 
 
@@ -257,18 +247,30 @@ namespace szinozon
             List<string> megoldas = new List<string>();
             List<string> tippek = new List<string>();
             string[] szinek = new string[16];
-            szinek[9] = "Kék";
-            szinek[10] = "Zöld";
-            szinek[11] = "Cián";
-            szinek[12] = "Piros";
-            szinek[13] = "Magenta";
-            szinek[14] = "Sárga";
-            szinek[15] = "Fehér";
+            szinek[9] = "kék";
+            szinek[10] = "zöld";
+            szinek[11] = "cián";
+            szinek[12] = "piros";
+            szinek[13] = "magenta";
+            szinek[14] = "sárga";
+            szinek[15] = "fehér";
 
             Console.WriteLine();
 
 
             Belepes(megoldas, tippek, szinek);
+            Console.WriteLine("Új játék?: Igen/Nem");
+            string valasz = Console.ReadLine();
+            if (valasz == "Igen")
+            {
+                megoldas.Clear();
+                Generalas(megoldas, szinek);
+                Tippeles(tippek, megoldas, szinek);
+            }
+            if (valasz == "Nem")
+            {
+                Belepes(megoldas, tippek, szinek);
+            }
 
             Console.ReadKey();
         }
