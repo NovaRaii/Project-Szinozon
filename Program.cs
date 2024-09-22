@@ -233,7 +233,7 @@ namespace szinozon
                 probak++;
             }
 
-            if (probak > 11 && !eredmeny.All(e => e == "jó"))
+            if (probak > 10 && !eredmeny.All(e => e == "jó"))
             {
                 Console.WriteLine("Sajnálom, nem találtad el a megoldást.");
             }
