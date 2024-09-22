@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
@@ -69,36 +70,43 @@ namespace szinozon
             }
             else if (kivalasztott == 1)
             {
-                Console.ResetColor();
-                Console.WriteLine("A játék lényege, hogy a gép által elrejtett 4 golyó színét és ezek sorrendjét kitaláljuk. Minden egyes tippünk után a gép " +
-                    "fekete és/vagy fehér \"tüskékkel\" válaszol. A fehér tüske jelentése: egy golyó színét eltaláltuk (de a helyét nem), a fekete tüske " +
-                    "jelentése: egy golyó színét és helyét is eltaláltuk. Azt, hogy melyik golyóra vonatkoznak az egyes tüskék azt nem árulja " +
-                    "el a gép, ezt nekünk kell kitalálnunk az egyes tippekre adott válaszokból.");
+                Console.ForegroundColor = ConsoleColor.White;
+                Console.WriteLine("A játék lényege, hogy a gép által elrejtett 4 golyó színét és ezek sorrendjét kitaláljuk.\n" +
+                    "Helyes jelentése: egy golyó színét és helyét is eltaláltuk.\n" +
+                    "Van benne jelentése: egy golyó színét eltaláltuk, de a helyét nem.\n" +
+                    "Nincs benne jelentése: nem találtuk el a golyó színét.\n" +
+                    "Azt, hogy melyik golyóra vonatkoznak azt a gép nem árulja el a gép, ezt nekünk kell kitalálnunk az egyes tippekre adott válaszokból.");
             }
         }
 
         static void Generalas(List<string> megoldas, string[] szinek)
         {
-            for (int i = 0; i < 4; i++)
+            while (megoldas.Count!=4)
             {
                 int sorszam = rnd.Next(9, szinek.Length);
-                megoldas.Add(szinek[sorszam]);
+                if(!megoldas.Contains(szinek[sorszam]))
+                {
+                    megoldas.Add(szinek[sorszam]);
+                }
+                
             }
         }
 
         static void Tippeles(List<string> tippek, List<string> megoldas, string[] szinek)
         {
-            
+
             string[] eredmeny = new string[4];
             Console.WriteLine("Parancsok: \nKilépés - a játék során bármikor ki lehet lépni a főmenübe\nSzabad a gazda - a játék véget ér és a gép felfedi a megoldást\nParancsok végrehajtása - Írd be a tippelésnél a parancsot!");
             Console.WriteLine();
+            int probak = 1;
 
-            while (!(eredmeny[0] == "jó" && eredmeny[1] == "jó" && eredmeny[2] == "jó" && eredmeny[3] == "jó"))
+            while (probak < 11)
             {
                 tippek.Clear();
                 Array.Clear(eredmeny, 0, eredmeny.Length);
 
-                Console.WriteLine("\nAdd meg a színeket: (Blue,Green,Cyan,Red,Magenta,Yellow,White)");
+                Console.WriteLine($"\n{probak}. próba - Add meg a színeket: (Kék, Zöld, Cián, Piros, Magenta, Sárga, Fehér)");
+                Console.WriteLine();
                 for (int i = 1; i < 5; i++)
                 {
                     Console.WriteLine($"{i}. szín:");
@@ -106,6 +114,10 @@ namespace szinozon
                     if (tipp == "Kilépés")
                     {
                         Belepes(megoldas, tippek, szinek);
+                    }
+                    if (tipp == "vissza") 
+                    {
+                        
                     }
                     if (tipp == "szabad a gazda")
                     {
@@ -125,7 +137,6 @@ namespace szinozon
                                     }
                                 }
 
-
                                 Console.ForegroundColor = (ConsoleColor)index;
 
                                 if (line == 0 || line == 3)
@@ -139,14 +150,14 @@ namespace szinozon
                             }
                             Console.WriteLine();
                         }
-                        Console.ResetColor();
+                        Console.ForegroundColor = ConsoleColor.White;
                         return;
                     }
                     else
                     {
                         tippek.Add(tipp);
                     }
-                    
+
                 }
 
 
@@ -154,22 +165,26 @@ namespace szinozon
                 {
                     if (megoldas[i] == tippek[i])
                     {
-                        eredmeny[i] = "jó";
+                        eredmeny[i] = "Helyes";
                     }
                     else if (megoldas.Contains(tippek[i]))
                     {
-                        eredmeny[i] = "van benne";
+                        eredmeny[i] = "Van benne";
                     }
                     else
                     {
-                        eredmeny[i] = "nincs benne";
+                        eredmeny[i] = "Nincs benne";
                     }
                 }
 
+                var sortedEredmeny = eredmeny.OrderBy(e => e == "Helyes" ? 0 : e == "Van benne" ? 1 : 2).ToArray();
 
-                for (int i = 0; i < eredmeny.Length; i++)
+                Console.WriteLine();
+                Console.Write("Találatok: ");
+
+                foreach (var e in sortedEredmeny)
                 {
-                    Console.Write($"{eredmeny[i]}  ");
+                    Console.Write($"{e}  ");
                 }
 
                 Console.WriteLine();
@@ -206,10 +221,34 @@ namespace szinozon
                     Console.WriteLine();
                 }
 
-                Console.ResetColor(); 
+                Console.ForegroundColor = ConsoleColor.White;
+
+                if (eredmeny.All(e => e == "Helyes"))
+                {
+                    Console.WriteLine();
+                    Console.WriteLine("Gratulálok, eltaláltad a megoldást!");
+                    break;
+                }
+
+                probak++;
             }
 
-            Console.WriteLine("Gratulálok, eltaláltad a megoldást!");
+            if (probak > 11 && !eredmeny.All(e => e == "jó"))
+            {
+                Console.WriteLine("Sajnálom, nem találtad el a megoldást.");
+            }
+            Console.WriteLine();
+            Console.WriteLine("Új játék?: Igen/Nem");
+            string valasz = Console.ReadLine();
+            if (valasz == "Igen")
+            {
+                Generalas(megoldas, szinek);
+                Tippeles(tippek, megoldas, szinek);
+            }
+            if (valasz == "Nem")
+            {
+                Belepes(megoldas, tippek, szinek);
+            }
         }
 
 
@@ -218,13 +257,13 @@ namespace szinozon
             List<string> megoldas = new List<string>();
             List<string> tippek = new List<string>();
             string[] szinek = new string[16];
-            szinek[9] = "Blue";
-            szinek[10] = "Green";
-            szinek[11] = "Cyan";
-            szinek[12] = "Red";
+            szinek[9] = "Kék";
+            szinek[10] = "Zöld";
+            szinek[11] = "Cián";
+            szinek[12] = "Piros";
             szinek[13] = "Magenta";
-            szinek[14] = "Yellow";
-            szinek[15] = "White";
+            szinek[14] = "Sárga";
+            szinek[15] = "Fehér";
 
             Console.WriteLine();
 
