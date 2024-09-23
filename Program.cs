@@ -78,27 +78,36 @@ namespace szinozon
 
             while (probak < 11)
             {
-                
+
                 tippek.Clear();
                 Array.Clear(eredmeny, 0, eredmeny.Length);
                 Console.WriteLine($"\n{probak}. próba - Add meg a színeket: (Kék, Zöld, Cián, Piros, Magenta, Sárga, Fehér)\n");
 
-                while (tippek.Count!= 4)
+                while (tippek.Count != 4)
                 {
                     Console.WriteLine($"{db}. szín:");
                     string tipp = Console.ReadLine().Trim().Split(' ')[0];
 
-                    if (tipp == "Kilépés" && tipp == "kilépés")
+                    if (tipp == "Kilépés" || tipp == "kilépés")
                     {
                         Belepes(megoldas, tippek, szinek);
                     }
-                    if (tipp == "Mégse" && tipp == "mégse")
+                    if (tipp == "Mégse" || tipp == "mégse")
                     {
-                        tippek.RemoveAt(tippek.Count-1);
-                        Console.WriteLine($"{db-1}. szín:");
-                        tipp = Console.ReadLine().Trim().Split(' ')[0];
+                        if (tippek.Count > 0)
+                        {
+                            tippek.RemoveAt(tippek.Count - 1);
+                            db--;
+                            continue; 
+                        }
+                        else
+                        {
+                            Console.WriteLine("Nincs mit visszavonni!");
+                            continue;
+                        }
                     }
-                    if (tipp == "Szabad a gazda" && tipp == "szabad a gazda")
+
+                    if (tipp == "Szabad a gazda" || tipp == "szabad a gazda")
                     {
                         for (int y = 0; y < 4; y++)
                         {
@@ -170,7 +179,7 @@ namespace szinozon
                         int index = 0;
                         for (int j = 0; j < szinek.Length; j++)
                         {
-                            if (tippek[i] == szinek[j])
+                            if (tippek[i] == szinek[j]) 
                             {
                                 index = j;
                                 break;
@@ -199,7 +208,7 @@ namespace szinozon
                 }
                 probak++;
                 db = 1;
-                
+
             }
 
             if (probak > 10 && !eredmeny.All(e => e == "Helyes"))
