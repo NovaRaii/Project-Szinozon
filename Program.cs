@@ -86,8 +86,27 @@ namespace szinozon
                 while (tippek.Count != 4)
                 {
                     Console.WriteLine($"{db}. szín:");
-                    string tipp = Console.ReadLine();
-                    if (tipp == "Szabad a gazda" || tipp == "szabad a gazda")
+                    string tipp = Console.ReadLine().Trim().Split(' ')[0];
+
+                    if (tipp == "Kilépés" || tipp == "kilépés")
+                    {
+                        Belepes(megoldas, tippek, szinek);
+                    }
+                    if (tipp == "Mégse" || tipp == "mégse")
+                    {
+                        if (tippek.Count > 0)
+                        {
+                            tippek.RemoveAt(tippek.Count - 1);
+                            db--;
+                            continue;
+                        }
+                        else
+                        {
+                            Console.WriteLine("Nincs mit visszavonni!");
+                            continue;
+                        }
+                    }
+                    if (tipp == "Szabad" || tipp == "szabad")
                     {
                         for (int y = 0; y < 4; y++)
                         {
@@ -118,29 +137,6 @@ namespace szinozon
                         }
                         Console.ForegroundColor = ConsoleColor.White;
                         return;
-                    }
-                    else
-                    {
-                        tipp = Console.ReadLine().Trim().Split(' ')[0];
-                    }
-
-                    if (tipp == "Kilépés" || tipp == "kilépés")
-                    {
-                        Belepes(megoldas, tippek, szinek);
-                    }
-                    if (tipp == "Mégse" || tipp == "mégse")
-                    {
-                        if (tippek.Count > 0)
-                        {
-                            tippek.RemoveAt(tippek.Count - 1);
-                            db--;
-                            continue;
-                        }
-                        else
-                        {
-                            Console.WriteLine("Nincs mit visszavonni!");
-                            continue;
-                        }
                     }
                     else
                     {
