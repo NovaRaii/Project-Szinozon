@@ -72,25 +72,33 @@ namespace szinozon
         static void Tippeles(List<string> tippek, List<string> megoldas, string[] szinek)
         {
             string[] eredmeny = new string[4];
-            Console.WriteLine("Parancsok: \nKilépés - a játék során bármikor ki lehet lépni a főmenübe\nSzabad a gazda - a játék véget ér és a gép felfedi a megoldást\nParancsok végrehajtása - Írd be a tippelésnél a parancsot!");
+            Console.WriteLine("Parancsok: \nKilépés - a játék során bármikor ki lehet lépni a főmenübe\nSzabad a gazda - a játék véget ér és a gép felfedi a megoldást\nMégse - utolsó szín visszavonása\nParancsok végrehajtása - Írd be a tippelésnél a parancsot!");
             int probak = 1;
+            int db = 1;
 
             while (probak < 11)
             {
+                
                 tippek.Clear();
                 Array.Clear(eredmeny, 0, eredmeny.Length);
                 Console.WriteLine($"\n{probak}. próba - Add meg a színeket: (Kék, Zöld, Cián, Piros, Magenta, Sárga, Fehér)\n");
 
-                for (int i = 1; i < 5; i++)
+                while (tippek.Count!= 4)
                 {
-                    Console.WriteLine($"{i}. szín:");
+                    Console.WriteLine($"{db}. szín:");
                     string tipp = Console.ReadLine().Trim().Split(' ')[0];
 
-                    if (tipp == "Kilépés")
+                    if (tipp == "Kilépés" && tipp == "kilépés")
                     {
                         Belepes(megoldas, tippek, szinek);
                     }
-                    if (tipp == "szabad a gazda")
+                    if (tipp == "Mégse" && tipp == "mégse")
+                    {
+                        tippek.RemoveAt(tippek.Count-1);
+                        Console.WriteLine($"{db-1}. szín:");
+                        tipp = Console.ReadLine().Trim().Split(' ')[0];
+                    }
+                    if (tipp == "Szabad a gazda" && tipp == "szabad a gazda")
                     {
                         for (int y = 0; y < 4; y++)
                         {
@@ -125,6 +133,7 @@ namespace szinozon
                     else
                     {
                         tippek.Add(tipp.ToLower());
+                        db++;
                     }
                 }
 
@@ -189,6 +198,8 @@ namespace szinozon
                     break;
                 }
                 probak++;
+                db = 1;
+                
             }
 
             if (probak > 10 && !eredmeny.All(e => e == "Helyes"))
