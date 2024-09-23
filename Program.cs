@@ -203,7 +203,7 @@ namespace szinozon
                 if (eredmeny.All(e => e == "Helyes"))
                 {
                     Console.WriteLine("\nGratulálok, eltaláltad a megoldást!");
-                    break;
+                    return;
                 }
                 probak++;
                 db = 1;
@@ -233,20 +233,29 @@ namespace szinozon
 
             Belepes(megoldas, tippek, szinek);
 
-            Console.WriteLine("Új játék?: Igen/Nem");
-            string valasz = Console.ReadLine();
-            if (valasz == "Igen")
+            while (true) 
             {
-                megoldas.Clear();
-                Generalas(megoldas, szinek);
-                Tippeles(tippek, megoldas, szinek);
-            }
-            if (valasz == "Nem")
-            {
-                Belepes(megoldas, tippek, szinek);
+                Console.WriteLine("Új játék?: Igen/Nem");
+                string valasz = Console.ReadLine().Trim().ToLower();
+
+                if (valasz == "igen")
+                {
+                    megoldas.Clear();
+                    tippek.Clear();
+                    Generalas(megoldas, szinek);
+                    Tippeles(tippek, megoldas, szinek);
+                }
+                else if (valasz == "nem")
+                {
+                    Belepes(megoldas, tippek, szinek);   
+                }
+                else
+                {
+                    Console.WriteLine("Érvénytelen válasz! Kérlek, válaszd az 'Igen' vagy 'Nem' lehetőséget.");
+                }
             }
 
-            Console.ReadKey();
+            
         }
     }
 }
